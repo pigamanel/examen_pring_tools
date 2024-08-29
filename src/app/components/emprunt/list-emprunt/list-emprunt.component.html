@@ -1,0 +1,28 @@
+<div class="emprunts-list">
+  <h2>Liste des Emprunts</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Livre</th>
+        <th>Utilisateur</th>
+        <th>Date d'emprunt</th>
+        <th>Date de retour</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let emprunt of emprunts">
+        <td>{{ emprunt.id }}</td>
+        <td>{{ emprunt.livre.titre }}</td>
+        <td>{{ emprunt.dateEmprunt | date }}</td>
+        <td>
+          <input type="date" #returnDate>
+        </td>
+        <td>
+          <button (click)="returnEmprunt(emprunt.id, returnDate.value)">Retourner</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
