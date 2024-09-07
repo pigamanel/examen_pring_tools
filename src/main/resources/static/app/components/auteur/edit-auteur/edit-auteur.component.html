@@ -1,0 +1,15 @@
+<div class="container">
+  <h2>Modifier un Auteur</h2>
+  <form (ngSubmit)="updateAuteur()">
+    <label for="nom">Nom:</label>
+    <input type="text" id="nom" [(ngModel)]="auteur.nom" name="nom" required>
+
+    <label for="dateNaissance">Date de Naissance:</label>
+    <input type="date" id="dateNaissance" [(ngModel)]="auteur.dateNaissance" name="dateNaissance" required>
+
+    <label for="nationalite">Nationalité:</label>
+    <input type="text" id="nationalite" [(ngModel)]="auteur.nationalite" name="nationalite" required>
+
+    <button type="submit">Modifier</button>
+  </form>
+</div>
