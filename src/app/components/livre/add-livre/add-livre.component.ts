@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LivreService } from '../../../services/livre.service';
 import { Livre } from '../../../models/livre.model';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-add-livre',
@@ -9,20 +10,28 @@ import { Livre } from '../../../models/livre.model';
   styleUrls: ['./add-livre.component.css']
 })
 export class AddLivreComponent {
-  livre: Livre = {
-    id: 0,
+  livre: Omit<Livre, 'id'> = {
     titre: '',
     auteur: '',
-    datePublication: '',
+    datePublication: new Date(),
     isbn: '',
     genre: ''
   };
 
   constructor(private livreService: LivreService, private router: Router) { }
 
-  addLivre(): void {
-    this.livreService.addLivre(this.livre).subscribe(() => {
+  addLivre(myForm: NgForm): void {
+    const formValues = myForm.value;
+
+    // Convertir la date en objet Date
+    formValues.datePublication = new Date(formValues.datePublication);
+
+    // Envoyer les données au backend
+    this.livreService.addLivre(formValues).subscribe(() => {
+      // Redirection après ajout
       this.router.navigate(['/list-livre']);
+    }, (error) => {
+      console.error('Erreur lors de l\'ajout du livre:', error);
     });
   }
 }

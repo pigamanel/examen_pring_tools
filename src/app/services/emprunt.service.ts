@@ -7,38 +7,39 @@ import { Emprunt } from '../models/emprunt.model';
   providedIn: 'root'
 })
 export class EmpruntService {
-  private baseUrl = 'http://localhost:4000/api/emprunts'; // URL de votre API backend
+  private baseUrl = 'http://localhost:8080/api/emprunts';
 
   constructor(private http: HttpClient) { }
 
   // Obtenir la liste des emprunts
   getEmprunts(): Observable<Emprunt[]> {
-    return this.http.get<Emprunt[]>(this.baseUrl);
+    return this.http.get<Emprunt[]>(`${this.baseUrl}/ListeEmprunt`);
   }
 
   // Obtenir un emprunt par son ID
   getEmprunt(id: number): Observable<Emprunt> {
-    return this.http.get<Emprunt>(`${this.baseUrl}/${id}`);
+    return this.http.get<Emprunt>(`${this.baseUrl}/recupere/${id}`);
   }
 
   // Ajouter un nouvel emprunt
   addEmprunt(emprunt: Emprunt): Observable<Emprunt> {
-    return this.http.post<Emprunt>(this.baseUrl, emprunt);
+    return this.http.post<Emprunt>(`${this.baseUrl}/addemprunt`, emprunt);
   }
 
   // Mettre à jour un emprunt existant
   updateEmprunt(id: number, emprunt: Emprunt): Observable<Emprunt> {
-    return this.http.put<Emprunt>(`${this.baseUrl}/${id}`, emprunt);
+    return this.http.put<Emprunt>(`${this.baseUrl}/updateEmprunt/${id}`, emprunt);
   }
 
   // Supprimer un emprunt par son ID
   deleteEmprunt(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}/suprimer/${id}`);
   }
 
-  // Retourner un emprunt
-  returnEmprunt(id: number, dateRetour: string): Observable<Emprunt> {
-    // Envoyer la date de retour au backend pour mettre à jour l'emprunt
-    return this.http.patch<Emprunt>(`${this.baseUrl}/${id}/return`, { dateRetour });
+  // Mettre à jour la date de retour d'un emprunt
+  returnEmprunt(id: number, dateRetour: Date): Observable<Emprunt> {
+    // Créez un objet partiel avec uniquement dateRetour
+    const updatePayload = { dateRetour };
+    return this.http.patch<Emprunt>(`${this.baseUrl}/updateDateRetour/${id}`, updatePayload);
   }
 }

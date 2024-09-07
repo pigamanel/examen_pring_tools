@@ -14,14 +14,15 @@ import { Utilisateur } from '../../../models/utilisateur.model';
 })
 export class EditEmpruntComponent implements OnInit {
   emprunt: Emprunt = {
-    id: 0, // Assurez-vous que l'ID est initialisé
+    id: 0,
     livre: {} as Livre,
     utilisateur: {} as Utilisateur,
-    dateEmprunt: '',
-    dateRetour: ''
+    dateEmprunt: new Date(),
+    dateRetour: new Date()
   };
   livres: Livre[] = [];
   utilisateurs: Utilisateur[] = [];
+  errorMessage: string = '';
 
   constructor(
     private empruntService: EmpruntService,
@@ -33,22 +34,55 @@ export class EditEmpruntComponent implements OnInit {
 
   ngOnInit(): void {
     const id = +this.route.snapshot.paramMap.get('id')!;
-    this.empruntService.getEmprunt(id).subscribe(data => {
-      this.emprunt = data;
+
+    if (isNaN(id) || id <= 0) {
+      this.errorMessage = 'ID invalide.';
+      return;
+    }
+
+    this.empruntService.getEmprunt(id).subscribe({
+      next: (data: Emprunt) => {
+        this.emprunt = {
+          ...data,
+          dateEmprunt: data.dateEmprunt ? new Date(data.dateEmprunt) : new Date(),
+          dateRetour: data.dateRetour ? new Date(data.dateRetour) : new Date()
+        };
+      },
+      error: (err: any) => {
+        this.errorMessage = 'Erreur lors de la récupération de l\'emprunt.';
+        console.error('Erreur:', err);
+      }
     });
 
-    this.livreService.getLivres().subscribe(data => {
-      this.livres = data;
+    this.livreService.getAllLivres().subscribe({
+      next: (data: Livre[]) => this.livres = data,
+      error: (err: any) => {
+        this.errorMessage = 'Erreur lors de la récupération des livres.';
+        console.error('Erreur:', err);
+      }
     });
 
-    this.utilisateurService.getUtilisateurs().subscribe(data => {
-      this.utilisateurs = data;
+    this.utilisateurService.getUtilisateurs().subscribe({
+      next: (data: Utilisateur[]) => this.utilisateurs = data,
+      error: (err: any) => {
+        this.errorMessage = 'Erreur lors de la récupération des utilisateurs.';
+        console.error('Erreur:', err);
+      }
     });
   }
 
   updateEmprunt(): void {
-    this.empruntService.updateEmprunt(this.emprunt.id, this.emprunt).subscribe(() => {
-      this.router.navigate(['/list-emprunt']);
+    if (!this.emprunt.id) {
+      this.errorMessage = 'ID invalide.';
+      return;
+    }
+
+    this.empruntService.updateEmprunt(this.emprunt.id, this.emprunt).subscribe({
+      next: () => this.router.navigate(['/list-emprunt']),
+      error: (err: any) => {
+        this.errorMessage = 'Erreur lors de la mise à jour de l\'emprunt.';
+        console.error('Erreur:', err);
+      }
     });
   }
 }

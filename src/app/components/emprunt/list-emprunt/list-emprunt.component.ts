@@ -9,19 +9,58 @@ import { Emprunt } from '../../../models/emprunt.model';
 })
 export class ListEmpruntComponent implements OnInit {
   emprunts: Emprunt[] = [];
+  errorMessage: string = '';
 
   constructor(private empruntService: EmpruntService) { }
 
   ngOnInit(): void {
-    this.empruntService.getEmprunts().subscribe(data => {
-      this.emprunts = data;
+    this.loadEmprunts();
+  }
+
+  loadEmprunts(): void {
+    this.empruntService.getEmprunts().subscribe({
+      next: data => {
+        this.emprunts = data.map(emprunt => ({
+          ...emprunt,
+          dateEmprunt: new Date(emprunt.dateEmprunt),
+          dateRetour: emprunt.dateRetour ? new Date(emprunt.dateRetour) : undefined
+        }));
+      },
+      error: err => {
+        this.errorMessage = 'Erreur lors du chargement des emprunts.';
+        console.error('Erreur lors du chargement des emprunts:', err);
+      }
     });
   }
 
-  returnEmprunt(id: number, retourDate: string): void {
-    this.empruntService.returnEmprunt(id, retourDate).subscribe(() => {
-      // Actualiser la liste des emprunts
-      this.emprunts = this.emprunts.filter(emprunt => emprunt.id !== id);
+  returnEmprunt(emprunt: Emprunt, dateRetour: Date): void {
+    if (!dateRetour || isNaN(dateRetour.getTime())) {
+      this.errorMessage = 'Date de retour invalide.';
+      return;
+    }
+
+    const updatedEmprunt: Emprunt = {
+      ...emprunt,
+      dateRetour: dateRetour
+    };
+
+    this.empruntService.updateEmprunt(emprunt.id, updatedEmprunt).subscribe({
+      next: () => {
+        this.loadEmprunts();
+      },
+      error: err => {
+        this.errorMessage = 'Erreur lors du retour de l\'emprunt.';
+        console.error('Erreur lors du retour de l\'emprunt:', err);
+      }
     });
+  }
+
+  prepareReturn(emprunt: Emprunt, returnDateInput: HTMLInputElement): void {
+    const dateRetour = new Date(returnDateInput.value);
+    if (isNaN(dateRetour.getTime())) {
+      this.errorMessage = 'Date de retour invalide.';
+      return;
+    }
+    this.returnEmprunt(emprunt, dateRetour);
   }
 }
