@@ -22,7 +22,7 @@
         <td>{{ livre.genre }}</td>
         <td>
           <a [routerLink]="['/edit-livre', livre.id]">Modifier</a>
-          <a (click)="deleteLivre(livre.id)">Supprimer</a>
+          <a href="#" (click)="deleteLivre(livre.id)">Supprimer</a>
         </td>
       </tr>
     </tbody>

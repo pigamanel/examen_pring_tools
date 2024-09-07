@@ -1,6 +1,6 @@
 <div class="container">
   <h2>Ajouter un Emprunt</h2>
-  <form (ngSubmit)="addEmprunt()">
+  <form (ngSubmit)="addEmprunt(myform)" #myform="ngForm">
     <label for="livre">Livre:</label>
     <input type="text" id="livre" [(ngModel)]="emprunt.livre" name="livre" required>
 

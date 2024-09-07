@@ -1,1 +1,21 @@
-<p>edit-livre works!</p>
+<div class="container">
+  <h2>Modifier un Livre</h2>
+  <form (ngSubmit)="updateLivre()">
+    <label for="titre">Titre:</label>
+    <input type="text" id="titre" [(ngModel)]="livre.titre" name="titre" required>
+
+    <label for="auteur">Auteur:</label>
+    <input type="text" id="auteur" [(ngModel)]="livre.auteur" name="auteur" required>
+
+    <label for="datePublication">Date de Publication:</label>
+    <input type="date" id="datePublication" [(ngModel)]="livre.datePublication" name="datePublication" required>
+
+    <label for="isbn">ISBN:</label>
+    <input type="text" id="isbn" [(ngModel)]="livre.isbn" name="isbn" required>
+
+    <label for="genre">Genre:</label>
+    <input type="text" id="genre" [(ngModel)]="livre.genre" name="genre" required>
+
+    <button type="submit">Modifier</button>
+  </form>
+</div>

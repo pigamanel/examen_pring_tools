@@ -13,14 +13,28 @@ export class ListLivreComponent implements OnInit {
   constructor(private livreService: LivreService) { }
 
   ngOnInit(): void {
-    this.livreService.getLivres().subscribe(data => {
-      this.livres = data;
-    });
+    this.getLivres();
+  }
+
+  getLivres(): void {
+    this.livreService.getAllLivres().subscribe(
+      (data) => {
+        this.livres = data;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des livres :', error);
+      }
+    );
   }
 
   deleteLivre(id: number): void {
-    this.livreService.deleteLivre(id).subscribe(() => {
-      this.livres = this.livres.filter(livre => livre.id !== id);
-    });
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce livre?')) {
+      this.livreService.deleteLivre(id).subscribe(() => {
+        this.livres = this.livres.filter(livre => livre.id !== id);
+      },
+        (error) => {
+          console.error('Erreur lors de la suppression du livre :', error);
+        });
+    }
   }
 }

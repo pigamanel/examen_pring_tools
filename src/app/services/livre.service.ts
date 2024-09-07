@@ -7,12 +7,12 @@ import { Livre } from '../models/livre.model';
   providedIn: 'root'
 })
 export class LivreService {
-  private baseUrl = 'http://localhost:4000/api/livres'; // URL de votre API backend
+  private baseUrl = 'http://localhost:8080/api/livres';
 
   constructor(private http: HttpClient) { }
 
-  getLivres(): Observable<Livre[]> {
-    return this.http.get<Livre[]>(this.baseUrl);
+  getAllLivres(): Observable<Livre[]> {
+    return this.http.get<Livre[]>(`${this.baseUrl}/listeLivre`);
   }
 
   getLivreById(id: number): Observable<Livre> {
@@ -20,14 +20,14 @@ export class LivreService {
   }
 
   addLivre(livre: Livre): Observable<Livre> {
-    return this.http.post<Livre>(this.baseUrl, livre);
+    return this.http.post<Livre>(`${this.baseUrl}/addLivre`, livre);
   }
 
   updateLivre(id: number, livre: Livre): Observable<Livre> {
-    return this.http.put<Livre>(`${this.baseUrl}/${id}`, livre);
+    return this.http.put<Livre>(`${this.baseUrl}/${id}/update`, livre);
   }
 
   deleteLivre(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}/${id}/delete`);
   }
 }
