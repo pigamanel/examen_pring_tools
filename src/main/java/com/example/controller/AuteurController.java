@@ -15,22 +15,22 @@ public class AuteurController {
     @Autowired
     private AuteurService auteurService;
 
-    @GetMapping
+    @GetMapping("/ListeAuteur")
     public List<Auteur> getAllAuteurs() {
         return auteurService.getAllAuteurs();
     }
 
-    @PostMapping
+    @PostMapping("/AddAuteur")
     public Auteur addAuteur(@RequestBody Auteur auteur) {
         return auteurService.addAuteur(auteur);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/ModifierAuteur/{id}")
     public Auteur updateAuteur(@PathVariable Long id, @RequestBody Auteur auteurDetails) {
         return auteurService.updateAuteur(id, auteurDetails);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/SupAuteur/{id}")
     public void deleteAuteur(@PathVariable Long id) {
         auteurService.deleteAuteur(id);
     }

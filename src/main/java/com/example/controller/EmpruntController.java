@@ -15,32 +15,28 @@ public class EmpruntController {
     @Autowired
     private EmpruntService empruntService;
 
-    // Endpoint pour récupérer tous les emprunts
-    @GetMapping
+    @GetMapping("ListeEmprunt")
     public List<Emprunt> getAllEmprunts() {
         return empruntService.getAllEmprunts();
     }
 
-    // Endpoint pour récupérer un emprunt par son ID
-    @GetMapping("/{id}")
+
+    @GetMapping("/recupere/{id}")
     public Emprunt getEmpruntById(@PathVariable Long id) {
         return empruntService.getEmpruntById(id);
     }
 
-    // Endpoint pour ajouter un nouvel emprunt
-    @PostMapping
+    @PostMapping("/addemprunt")
     public Emprunt addEmprunt(@RequestBody Emprunt emprunt) {
         return empruntService.addEmprunt(emprunt);
     }
 
-    // Endpoint pour mettre à jour un emprunt existant
-    @PutMapping("/{id}")
+    @PutMapping("/updateEmprunt/{id}")
     public Emprunt updateEmprunt(@PathVariable Long id, @RequestBody Emprunt emprunt) {
         return empruntService.updateEmprunt(id, emprunt);
     }
 
-    // Endpoint pour supprimer un emprunt par son ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/suprimer/{id}")
     public void deleteEmprunt(@PathVariable Long id) {
         empruntService.deleteEmprunt(id);
     }

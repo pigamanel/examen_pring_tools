@@ -5,14 +5,12 @@ import com.example.repository.LivreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import java.util.List;
-
 @Service
 public class LivreService {
+
     @Autowired
     private LivreRepository livreRepository;
 
@@ -20,21 +18,35 @@ public class LivreService {
         return livreRepository.findAll();
     }
 
+    public Livre getLivreById(Long id) {
+        Optional<Livre> optionalLivre = livreRepository.findById(id);
+        return optionalLivre.orElseThrow(() -> new RuntimeException("Livre non trouvé"));
+    }
+
     public Livre addLivre(Livre livre) {
         return livreRepository.save(livre);
     }
 
-    public Livre updateLivre(Long id, Livre livreDetails) {
-        Livre livre = livreRepository.findById(id).orElseThrow();
-        livre.setTitre(livreDetails.getTitre());
-        livre.setAuteur(livreDetails.getAuteur());
-        livre.setDatePublication(livreDetails.getDatePublication());
-        livre.setIsbn(livreDetails.getIsbn());
-        livre.setGenre(livreDetails.getGenre());
-        return livreRepository.save(livre);
+    public Livre updateLivre(Long id, Livre livre) {
+        Livre existingLivre = getLivreById(id);
+
+        // Mise à jour des détails du livre
+        existingLivre.setTitre(livre.getTitre());
+        existingLivre.setAuteur(livre.getAuteur());
+        existingLivre.setDatePublication(livre.getDatePublication());
+        existingLivre.setIsbn(livre.getIsbn());
+        existingLivre.setGenre(livre.getGenre());
+
+        // Sauvegarde des modifications
+        return livreRepository.save(existingLivre);
     }
 
     public void deleteLivre(Long id) {
         livreRepository.deleteById(id);
     }
+
+	public Livre updateLivre(Livre existingLivre) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

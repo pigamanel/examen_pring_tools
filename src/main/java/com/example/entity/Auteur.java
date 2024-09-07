@@ -17,8 +17,28 @@ public class Auteur {
     private String nom;
     private LocalDate dateNaissance;
     private String nationalite;
+    
 
-    // Getters et Setters
+    public Auteur() {
+		super();
+	}
+
+	public Auteur(String nom, LocalDate dateNaissance, String nationalite) {
+		super();
+		this.nom = nom;
+		this.dateNaissance = dateNaissance;
+		this.nationalite = nationalite;
+	}
+
+	public Auteur(Long id, String nom, LocalDate dateNaissance, String nationalite) {
+		super();
+		this.id = id;
+		this.nom = nom;
+		this.dateNaissance = dateNaissance;
+		this.nationalite = nationalite;
+	}
+
+	// Getters et Setters
     public Long getId() {
         return id;
     }
